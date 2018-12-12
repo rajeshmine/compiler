@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Compiler</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
+  <script src="http://codemirror.net/lib/codemirror.js"></script>
+  <script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
+  <script src="http://codemirror.net/mode/javascript/javascript.js"></script>
+  <script src="http://codemirror.net/mode/clike/clike.js"></script>
+  <script type="text/javascript" src="http://codemirror.net/mode/xml/xml.js"></script>
+  <script type="text/javascript" src="https://codemirror.net/mode/python/python.js"></script>
+  <script type="text/javascript" src="https://codemirror.net/3/mode/htmlmixed/htmlmixed.js"></script>
+
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
+  <script src="./js/index.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.8.0/xterm.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.8.0/xterm.min.js"></script>
+
+
+  <link rel="stylesheet" href="http://codemirror.net/theme/3024-day.css">
+  <link rel="stylesheet" href="http://codemirror.net/theme/3024-night.css">
+  <link rel="stylesheet" href="http://codemirror.net/theme/ambiance.css">
+  <link rel="stylesheet" href="http://codemirror.net/theme/base16-dark.css">
+  <link rel="stylesheet" href="http://codemirror.net/theme/base16-light.css">
+  <link rel="stylesheet" href="http://codemirror.net/theme/blackboard.css">
+  <link rel="stylesheet" href="http://codemirror.net/theme/cobalt.css">
+  <link rel="stylesheet" href="http://codemirror.net/theme/eclipse.css">
+  <link rel="stylesheet" href="http://codemirror.net/theme/elegant.css">
+  <link rel="stylesheet" href="http://codemirror.net/theme/erlang-dark.css">
+  <link rel="stylesheet" href="http://codemirror.net/theme/lesser-dark.css">
+  <link rel="stylesheet" href="http://codemirror.net/theme/midnight.css">
+  <link rel="stylesheet" href="http://codemirror.net/theme/monokai.css">
+  <link rel="stylesheet" href="http://codemirror.net/theme/neat.css">
+
+  <script src='http://codemirror.net/addon/edit/closetag.js'></script>
+  <script src='http://codemirror.net/addon/selection/active-line.js'></script>
+  <script src='http://codemirror.net/addon/fold/foldcode.js'></script>
+  <script src='http://codemirror.net/addon/fold/foldgutter.js'></script>
+  <script src='http://codemirror.net/addon/fold/brace-fold.js'></script>
+  <script src='http://codemirror.net/addon/fold/xml-fold.js'></script>
+  <script src='http://codemirror.net/addon/fold/comment-fold.js'></script>
+
+
+
+</head>
+
+<body>
+  <br />
+  <div class="container-fluid">
+    <div class="row" style="margin: 0">
+      <form id="myform" name="myform" action="javascript:void(0);" onSubmit="compilecode()">
+        <div class="selectlangdiv pad10 text-right">
+
+          <select name="lang" id="languageselect">
+            <option value="Java" selected>Java</option>
+            <option value="Python">Python</option>
+            <option value="Web">HTML,CSS,Javascript</option>
+          </select>
+          <span class="settingsicon glyphicon glyphicon-cog" onclick="settingsdivtoggle()"></span>
+
+        </div>
+        <div class="settingsdiv">
+          <div class="arrow-up"></div>
+          <p class="fontweight500">Theme</p>
+          <div class="btn-group">
+            <button type="button" class="btn themebtn themeselected" value="default">Default</button>
+            <button type="button" class="btn themebtn" value="monokai">Monokai</button>
+            <button type="button" class="btn themebtn" value="cobalt">Cobalt</button>
+            <button type="button" class="btn themebtn" value="blackboard">Blackboard</button>
+            <button type="button" class="btn themebtn" value="ambiance">Ambiance</button>
+          </div>
+          <div class="text-right">
+            <button class="closebtn" type="button" onclick="settingsdivtoggle()">Close</button>
+          </div>
+        </div>
+        <div class="codeouterdiv">
+
+        </div>
+
+        <div class="col-sm-12" id="inputRadiocolumn">
+           
+          <div class="pad10 inputRadiodiv">
+              <div class="pretty p-switch p-fill">
+                  <input type="checkbox" id="inputRadio" />
+                  <div class="state">
+                      <label>Compile with Custom Input</label>
+                  </div>
+              </div>
+                      
+          </div>
+        </div>
+        <div class="col-sm-12" id="inputdiv">
+            <p class="outputheadtxt">Custom Input</p>
+            <textarea class="form-control" rows="5" cols="100" id="input" name="input" placeholder="Enter Input here ..."></textarea>
+        </div>       
+
+        <div class="text-right">
+          <button type="submit" class="submitbtn" value="submit" name="submit">Run Code</button>
+        </div>
+        <div class="col-sm-12 pad0" id="outputscreen">
+          <p class="outputheadtxt">Output Screen</p>
+          <div class="preview">
+            <iframe id="previewTarget">
+              <!DOCTYPE html>
+              <html lang="en">
+
+              <head>
+                <title>Output</title>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+              </head>
+
+              <body>
+              </body>
+
+              </html>
+            </iframe>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+<br/>
+
+</body>
+
+</html>
